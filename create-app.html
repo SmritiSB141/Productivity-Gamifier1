@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Install Productivity Gamifier</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            padding: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        button {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 25px 0;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        .steps {
+            text-align: left;
+            max-width: 500px;
+            margin: 30px auto;
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+        }
+        .steps ol {
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        .steps li {
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+        .feature-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        .feature {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Install Productivity Gamifier</h1>
+        <p style="font-size: 1.2em; opacity: 0.9;">Turn your productivity into an exciting game!</p>
+        
+        <div class="steps">
+            <h3>📋 Simple Installation Steps:</h3>
+            <ol>
+                <li><strong>Click the button below</strong> to open the app</li>
+                <li>In Chrome, click <strong>⋮ (three dots menu)</strong> in top-right corner</li>
+                <li>Go to <strong>More tools</strong> → <strong>Create shortcut</strong></li>
+                <li><strong>IMPORTANT:</strong> Check the box <strong>"Open as window"</strong></li>
+                <li>Click <strong>"Create"</strong> - Done! 🎉</li>
+            </ol>
+        </div>
+
+        <button onclick="window.open('index.html', '_blank')">
+            📱 OPEN PRODUCTIVITY GAMIFIER
+        </button>
+
+        <div class="feature-list">
+            <div class="feature">✅ Task Management</div>
+            <div class="feature">⭐ XP & Level System</div>
+            <div class="feature">🎯 Daily Quests</div>
+            <div class="feature">🔥 Streak Tracking</div>
+            <div class="feature">👤 Avatar Customization</div>
+            <div class="feature">🏆 Achievement System</div>
+        </div>
+
+        <p><small>After installation, the app will open in its own window without browser controls - just like a real app!</small></p>
+    </div>
+
+    <script>
+        // Auto-detect if already installed
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            document.body.innerHTML = `
+                <div class="container">
+                    <h1>🎉 App Already Installed!</h1>
+                    <p>Your Productivity Gamifier is already installed as an app.</p>
+                    <button onclick="window.open('index.html', '_blank')">Open App</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

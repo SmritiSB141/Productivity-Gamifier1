@@ -1,0 +1,22 @@
+{
+  "name": "Productivity Gamifier",
+  "short_name": "ProdGamifier",
+  "description": "Level up your productivity with gamified tasks",
+  "start_url": "/Productivity-Gamifier/",
+  "display": "standalone",
+  "background_color": "#4a6fa5",
+  "theme_color": "#4a6fa5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

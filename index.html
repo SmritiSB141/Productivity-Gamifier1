@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity Gamifier - Level Up Your Life!</title>
+    
+    <!-- PWA App Features -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="ProdGamifier">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#4a6fa5">
+
+    <!-- PWA Manifest -->
+<link rel="manifest" href="app.webmanifest">
+
+<!-- Icons for different devices -->
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<!-- PWA Meta Tags -->
+<meta name="theme-color" content="#4a6fa5">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Productivity Gamifier">
+
+<!-- PWA Configuration -->
+<link rel="manifest" href="app.webmanifest">
+<meta name="theme-color" content="#4a6fa5">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ProdGamifier">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #6b8cbc;
+            --accent: #ff9a3c;
+            --light: #f5f7fa;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --epic: #9b59b6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--dark);
+            min-height: 100vh;
+            border-radius: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Animated Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            color: white;
+            padding: 25px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: headerGlow 3s ease-in-out infinite alternate;
+            background-size: 200% 200%;
+        }
+
+        @keyframes headerGlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--warning), var(--success), var(--epic));
+            animation: rainbow 2s linear infinite;
+            background-size: 200% 100%;
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            border: 4px solid var(--accent);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        
+        .avatar:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+        
+        .level-info {
+            text-align: right;
+        }
+        
+        .level-bar-container {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+        
+        .level-bar {
+            width: 200px;
+            height: 16px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .level-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--warning), var(--success));
+            width: 30%;
+            border-radius: 8px;
+            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .level-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .xp-text {
+            font-size: 12px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card h2 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 3px solid var(--light);
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5em;
+        }
+        
+        .card h2 i {
+            color: var(--accent);
+            font-size: 1.3em;
+        }
+        
+        .task-form {
+            display: flex;
+            margin-bottom: 25px;
+            gap: 12px;
+            background: var(--light);
+            padding: 15px;
+            border-radius: 15px;
+        }
+        
+        .task-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .task-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(74, 111, 165, 0.1);
+            transform: scale(1.02);
+        }
+        
+        .task-submit {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(74, 111, 165, 0.3);
+        }
+        
+        .task-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(74, 111, 165, 0.4);
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+        }
+        
+        .task-list {
+            list-style-type: none;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .task-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .task-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .task-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            border-bottom: 2px solid #f0f0f0;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .task-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .task-item:hover {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            transform: translateX(5px);
+        }
+        
+        .task-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .task-checkbox {
+            margin-right: 18px;
+            transform: scale(1.4);
+            cursor: pointer;
+            accent-color: var(--success);
+            transition: transform 0.3s ease;
+        }
+
+        .task-checkbox:hover {
+            transform: scale(1.6);
+        }
+        
+        .task-text {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .task-xp {
+            background: linear-gradient(135deg, var(--accent), var(--warning));
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(255, 154, 60, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .completed .task-text {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .completed .task-xp {
+            background: linear-gradient(135deg, var(--success), #27ae60);
+            animation: none;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 25px 15px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .streak {
+            color: #ff6b6b;
+        }
+        
+        .coins {
+            color: #ffd93d;
+        }
+        
+        .avatar-customizer {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .avatar-preview {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            border: 6px solid var(--accent);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease;
+            animation: avatarGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes avatarGlow {
+            0% { box-shadow: 0 10px 25px rgba(255, 154, 60, 0.4); }
+            100% { box-shadow: 0 15px 35px rgba(255, 154, 60, 0.8); }
+        }
+        
+        .avatar-preview:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .customization-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .option {
+            padding: 12px 20px;
+            background: var(--light);
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+        
+        .option:hover {
+            background-color: #e9ecef;
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .option.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(74, 111, 165, 0.4);
+        }
+        
+        .rewards-section {
+            margin-top: 20px;
+        }
+        
+        .reward-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            border-bottom: 2px solid #eee;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reward-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--warning);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .reward-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .reward-item:hover {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            transform: translateX(5px);
+        }
+        
+        .reward-cost {
+            margin-left: auto;
+            color: var(--warning);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 1.1em;
+        }
+        
+        .reward-button {
+            background: linear-gradient(135deg, var(--success), #27ae60);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+        }
+        
+        .reward-button:hover {
+            background: linear-gradient(135deg, #27ae60, var(--success));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        .reward-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .reward-button:disabled:hover {
+            background: #ccc;
+            transform: none;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--success), #27ae60);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transform: translateX(100%) scale(0.8);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .notification.show {
+            transform: translateX(0) scale(1);
+        }
+        
+        .level-up {
+            background: linear-gradient(135deg, var(--warning), var(--accent), var(--epic));
+        }
+        
+        .achievement {
+            background: linear-gradient(135deg, var(--info), var(--primary), #9b59b6);
+        }
+
+        .epic {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6, #e74c3c);
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .level-info {
+                text-align: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .task-form {
+                flex-direction: column;
+            }
+            
+            .task-submit {
+                justify-content: center;
+            }
+            
+            .level-bar {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 30px;
+            color: #888;
+            background: var(--light);
+            border-radius: 15px;
+            border: 2px dashed #ddd;
+        }
+        
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: #ccc;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(45deg, var(--accent), var(--warning), var(--success), var(--epic));
+            opacity: 0;
+            z-index: 9999;
+            border-radius: 50%;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--warning), var(--accent), var(--epic));
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-left: 10px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            animation: badgeGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes badgeGlow {
+            0% { box-shadow: 0 3px 10px rgba(255, 154, 60, 0.4); }
+            100% { box-shadow: 0 5px 20px rgba(255, 154, 60, 0.8); }
+        }
+
+        .quest-of-the-day {
+            background: linear-gradient(135deg, #ff6b6b, #ffa726);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+            animation: questPulse 3s infinite;
+        }
+
+        @keyframes questPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .quest-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .quest-reward {
+            font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        /* Motivation Quote Styles */
+        .motivation-quote {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .motivation-quote.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .quote-text {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        .quote-author {
+            font-size: 1em;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .quote-icon {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #ffd93d;
+        }
+
+        .close-quote {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .close-quote:hover {
+            opacity: 1;
+        }
+
+        /* Add to existing notification styles */
+        .notification.motivational {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6, #e74c3c);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="container">
+            <header>
+                <div class="header-content">
+                    <h1><i class="fas fa-gamepad"></i> Productivity Quest</h1>
+                    <div class="user-info">
+                        <div class="avatar" id="user-avatar">👤</div>
+                        <div class="level-info">
+                            <div>Level <span id="user-level">1</span> <span class="badge" id="level-badge">Beginner</span></div>
+                            <div><span id="user-xp">0</span>/<span id="next-level-xp">100</span> XP</div>
+                            <div class="level-bar-container">
+                                <div class="level-bar">
+                                    <div class="level-progress" id="level-progress"></div>
+                                </div>
+                            </div>
+                            <div class="xp-text"><i class="fas fa-coins"></i> <span id="user-coins">0</span> coins • <i class="fas fa-fire"></i> <span id="user-streak">0</span> day streak</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Daily Quest -->
+            <div class="quest-of-the-day">
+                <div class="quest-title">
+                    <i class="fas fa-scroll"></i> Today's Special Quest!
+                </div>
+                <div>Complete 3 tasks today to earn <span class="quest-reward">+50 Bonus XP!</span></div>
+            </div>
+            
+            <div class="dashboard">
+                <div class="card">
+                    <h2><i class="fas fa-tasks"></i> Your Missions</h2>
+                    <form class="task-form" id="task-form">
+                        <input type="text" class="task-input" id="task-input" placeholder="🎯 What's your next mission?" required>
+                        <button type="submit" class="task-submit"><i class="fas fa-rocket"></i> Launch Mission</button>
+                    </form>
+                    <ul class="task-list" id="task-list">
+                        <div class="empty-state" id="empty-tasks">
+                            <i class="fas fa-flag"></i>
+                            <p>No missions yet! Add your first mission to begin your quest!</p>
+                        </div>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h2><i class="fas fa-trophy"></i> Hero Stats</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value streak" id="streak-count">0 <i class="fas fa-fire"></i></div>
+                            <div class="stat-label">Current Streak</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="tasks-completed">0 <i class="fas fa-check-circle"></i></div>
+                            <div class="stat-label">Missions Completed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-xp">0 <i class="fas fa-star"></i></div>
+                            <div class="stat-label">Total XP</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value coins" id="coins-earned">0 <i class="fas fa-coins"></i></div>
+                            <div class="stat-label">Gold Coins</div>
+                        </div>
+                    </div>
+                    
+                    <div class="avatar-customizer">
+                        <h2><i class="fas fa-user-astronaut"></i> Choose Your Hero</h2>
+                        <div class="avatar-preview" id="avatar-preview">👤</div>
+                        <div class="customization-options">
+                            <div class="option active" data-avatar="👤">Adventurer</div>
+                            <div class="option" data-avatar="🦊">Forest Guardian</div>
+                            <div class="option" data-avatar="🐱">Stealth Agent</div>
+                            <div class="option" data-avatar="🦸">Super Hero</div>
+                            <div class="option" data-avatar="🧙">Magic Wizard</div>
+                        </div>
+                    </div>
+                    
+                    <div class="rewards-section">
+                        <h2><i class="fas fa-gem"></i> Treasure Shop</h2>
+                        <div class="reward-item">
+                            <span><i class="fas fa-palette"></i> Golden Theme</span>
+                            <span class="reward-cost"><i class="fas fa-coins"></i> 50 gold</span>
+                            <button class="reward-button" id="theme-reward" disabled><i class="fas fa-shopping-cart"></i> Unlock</button>
+                        </div>
+                        <div class="reward-item">
+                            <span><i class="fas fa-medal"></i> Legendary Badge</span>
+                            <span class="reward-cost"><i class="fas fa-coins"></i> 100 gold</span>
+                            <button class="reward-button" id="badge-reward" disabled><i class="fas fa-shopping-cart"></i> Unlock</button>
+                        </div>
+                        <div class="reward-item">
+                            <span><i class="fas fa-bolt"></i> XP Power Boost</span>
+                            <span class="reward-cost"><i class="fas fa-coins"></i> 150 gold</span>
+                            <button class="reward-button" id="double-xp-reward" disabled><i class="fas fa-shopping-cart"></i> Activate</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Motivation Quote Popup -->
+    <div class="motivation-quote" id="motivation-quote">
+        <button class="close-quote" id="close-quote">&times;</button>
+        <div class="quote-icon" id="quote-icon">💪</div>
+        <div class="quote-text" id="quote-text"></div>
+        <div class="quote-author" id="quote-author"></div>
+    </div>
+
+    <script>
+        // Motivational Quotes Database
+        const motivationalQuotes = [
+            {
+                text: "The way to get started is to quit talking and begin doing.",
+                author: "Walt Disney",
+                icon: "🚀",
+                type: "task"
+            },
+            {
+                text: "Don't watch the clock; do what it does. Keep going.",
+                author: "Sam Levenson", 
+                icon: "⏰",
+                type: "task"
+            },
+            {
+                text: "The secret of getting ahead is getting started.",
+                author: "Mark Twain",
+                icon: "🎯",
+                type: "task"
+            },
+            {
+                text: "It's not whether you get knocked down, it's whether you get up.",
+                author: "Vince Lombardi",
+                icon: "💪",
+                type: "task"
+            },
+            {
+                text: "Your time is limited, don't waste it living someone else's life.",
+                author: "Steve Jobs",
+                icon: "⏳",
+                type: "task"
+            },
+            {
+                text: "The future depends on what you do today.",
+                author: "Mahatma Gandhi",
+                icon: "🔮",
+                type: "task"
+            },
+            {
+                text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+                author: "Winston Churchill",
+                icon: "🏆",
+                type: "level"
+            },
+            {
+                text: "The only way to do great work is to love what you do.",
+                author: "Steve Jobs", 
+                icon: "❤️",
+                type: "level"
+            },
+            {
+                text: "Believe you can and you're halfway there.",
+                author: "Theodore Roosevelt",
+                icon: "🌟",
+                type: "level"
+            },
+            {
+                text: "You are never too old to set another goal or to dream a new dream.",
+                author: "C.S. Lewis",
+                icon: "🎯",
+                type: "level"
+            },
+            {
+                text: "The harder you work for something, the greater you'll feel when you achieve it.",
+                author: "Anonymous",
+                icon: "🔥",
+                type: "level"
+            },
+            {
+                text: "Don't stop when you're tired. Stop when you're done.",
+                author: "Anonymous",
+                icon: "🏁",
+                type: "streak"
+            },
+            {
+                text: "Small daily improvements are the key to staggering long-term results.",
+                author: "Anonymous",
+                icon: "📈",
+                type: "streak"
+            },
+            {
+                text: "Consistency is what transforms average into excellence.",
+                author: "Anonymous",
+                icon: "⚡",
+                type: "streak"
+            },
+            {
+                text: "The journey of a thousand miles begins with one step.",
+                author: "Lao Tzu",
+                icon: "👣",
+                type: "first"
+            },
+            {
+                text: "Every accomplishment starts with the decision to try.",
+                author: "John F. Kennedy",
+                icon: "🎉",
+                type: "first"
+            }
+        ];
+
+        // Enhanced Game State with Quests and Achievements
+        const gameState = {
+            level: 1,
+            xp: 0,
+            nextLevelXp: 100,
+            streak: 0,
+            tasksCompleted: 0,
+            totalXp: 0,
+            coins: 0,
+            avatar: "👤",
+            lastCompletedDate: null,
+            tasks: [],
+            levelBadges: ["Beginner", "Explorer", "Adventurer", "Warrior", "Master", "Legend", "Epic Hero"],
+            dailyQuest: {
+                target: 3,
+                completed: 0,
+                reward: 50,
+                claimed: false
+            },
+            achievements: [],
+            firstTaskCompleted: false
+        };
+
+        // DOM Elements
+        const taskForm = document.getElementById('task-form');
+        const taskInput = document.getElementById('task-input');
+        const taskList = document.getElementById('task-list');
+        const emptyTasks = document.getElementById('empty-tasks');
+        const userLevel = document.getElementById('user-level');
+        const levelBadge = document.getElementById('level-badge');
+        const userXp = document.getElementById('user-xp');
+        const nextLevelXp = document.getElementById('next-level-xp');
+        const levelProgress = document.getElementById('level-progress');
+        const userCoins = document.getElementById('user-coins');
+        const userStreak = document.getElementById('user-streak');
+        const streakCount = document.getElementById('streak-count');
+        const tasksCompleted = document.getElementById('tasks-completed');
+        const totalXp = document.getElementById('total-xp');
+        const coinsEarned = document.getElementById('coins-earned');
+        const userAvatar = document.getElementById('user-avatar');
+        const avatarPreview = document.getElementById('avatar-preview');
+        const avatarOptions = document.querySelectorAll('.option');
+        const themeReward = document.getElementById('theme-reward');
+        const badgeReward = document.getElementById('badge-reward');
+        const doubleXpReward = document.getElementById('double-xp-reward');
+        const motivationQuote = document.getElementById('motivation-quote');
+        const quoteText = document.getElementById('quote-text');
+        const quoteAuthor = document.getElementById('quote-author');
+        const quoteIcon = document.getElementById('quote-icon');
+        const closeQuote = document.getElementById('close-quote');
+
+        // Load game state from localStorage
+        function loadGameState() {
+            const savedState = localStorage.getItem('productivityQuest');
+            if (savedState) {
+                const parsedState = JSON.parse(savedState);
+                Object.assign(gameState, parsedState);
+            }
+            updateUI();
+        }
+
+        // Save game state to localStorage
+        function saveGameState() {
+            localStorage.setItem('productivityQuest', JSON.stringify(gameState));
+        }
+
+        // Show motivational quote
+        function showMotivationalQuote(type = 'task') {
+            const filteredQuotes = motivationalQuotes.filter(quote => quote.type === type);
+            const randomQuote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
+            
+            quoteText.textContent = randomQuote.text;
+            quoteAuthor.textContent = `- ${randomQuote.author}`;
+            quoteIcon.textContent = randomQuote.icon;
+            
+            motivationQuote.classList.add('show');
+            
+            // Auto-close after 5 seconds
+            setTimeout(() => {
+                motivationQuote.classList.remove('show');
+            }, 5000);
+        }
+
+        // Close quote when X is clicked
+        closeQuote.addEventListener('click', () => {
+            motivationQuote.classList.remove('show');
+        });
+
+        // Close quote when clicking outside
+        motivationQuote.addEventListener('click', (e) => {
+            if (e.target === motivationQuote) {
+                motivationQuote.classList.remove('show');
+            }
+        });
+
+        // Update UI with current game state
+        function updateUI() {
+            userLevel.textContent = gameState.level;
+            levelBadge.textContent = gameState.levelBadges[Math.min(gameState.level - 1, gameState.levelBadges.length - 1)];
+            userXp.textContent = gameState.xp;
+            nextLevelXp.textContent = gameState.nextLevelXp;
+            userCoins.textContent = gameState.coins;
+            userStreak.textContent = gameState.streak;
+            streakCount.textContent = `${gameState.streak} `;
+            tasksCompleted.textContent = `${gameState.tasksCompleted} `;
+            totalXp.textContent = `${gameState.totalXp} `;
+            coinsEarned.textContent = `${gameState.coins} `;
+            
+            // Update level progress bar
+            const progressPercentage = (gameState.xp / gameState.nextLevelXp) * 100;
+            levelProgress.style.width = `${Math.min(progressPercentage, 100)}%`;
+            
+            // Update avatar
+            userAvatar.textContent = gameState.avatar;
+            avatarPreview.textContent = gameState.avatar;
+            
+            // Update task list
+            renderTasks();
+            
+            // Update reward buttons
+            updateRewardButtons();
+            
+            // Update active avatar option
+            avatarOptions.forEach(option => {
+                option.classList.toggle('active', option.dataset.avatar === gameState.avatar);
+            });
+
+            // Update daily quest progress
+            updateDailyQuest();
+        }
+
+        function updateDailyQuest() {
+            const questProgress = gameState.dailyQuest.completed;
+            const questTarget = gameState.dailyQuest.target;
+            
+            if (questProgress >= questTarget && !gameState.dailyQuest.claimed) {
+                showNotification(`🎉 Daily Quest Complete! Claim your ${gameState.dailyQuest.reward} XP bonus!`, 'epic');
+                gameState.dailyQuest.claimed = true;
+                saveGameState();
+            }
+        }
+
+        // Render tasks in the task list
+        function renderTasks() {
+            if (gameState.tasks.length === 0) {
+                emptyTasks.style.display = 'block';
+                taskList.innerHTML = '';
+                taskList.appendChild(emptyTasks);
+                return;
+            }
+            
+            emptyTasks.style.display = 'none';
+            taskList.innerHTML = '';
+            
+            gameState.tasks.forEach((task, index) => {
+                const taskItem = document.createElement('li');
+                taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+                
+                taskItem.innerHTML = `
+                    <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} data-index="${index}">
+                    <span class="task-text">${task.text}</span>
+                    <span class="task-xp"><i class="fas fa-star"></i> +${task.xp} XP</span>
+                `;
+                
+                taskList.appendChild(taskItem);
+            });
+            
+            // Add event listeners to checkboxes
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', handleTaskCompletion);
+            });
+        }
+
+        // Handle task form submission
+        taskForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const taskText = taskInput.value.trim();
+            if (taskText) {
+                // Generate random XP between 15 and 35
+                const xp = Math.floor(Math.random() * 21) + 15;
+                
+                gameState.tasks.push({
+                    text: taskText,
+                    xp: xp,
+                    completed: false
+                });
+                
+                taskInput.value = '';
+                saveGameState();
+                updateUI();
+                
+                showNotification(`🚀 Mission launched! Complete it to earn ${xp} XP!`, 'info');
+            }
+        });
+
+        // Handle task completion
+        function handleTaskCompletion(e) {
+            const index = parseInt(e.target.dataset.index);
+            const task = gameState.tasks[index];
+            
+            if (e.target.checked && !task.completed) {
+                task.completed = true;
+                
+                // Award XP
+                gameState.xp += task.xp;
+                gameState.totalXp += task.xp;
+                gameState.tasksCompleted += 1;
+                
+                // Update daily quest
+                gameState.dailyQuest.completed += 1;
+                
+                // Award coins
+                const coinsEarned = Math.floor(task.xp / 4); // More coins!
+                gameState.coins += coinsEarned;
+                
+                // Check for level up
+                const leveledUp = checkLevelUp();
+                
+                // Update streak
+                updateStreak();
+                
+                // Check if this is the first task
+                const wasFirstTask = !gameState.firstTaskCompleted;
+                if (wasFirstTask) {
+                    gameState.firstTaskCompleted = true;
+                }
+                
+                saveGameState();
+                updateUI();
+                
+                // Show motivational quote
+                if (wasFirstTask) {
+                    setTimeout(() => showMotivationalQuote('first'), 1000);
+                } else {
+                    setTimeout(() => showMotivationalQuote('task'), 1000);
+                }
+                
+                // Show notification
+                if (leveledUp) {
+                    setTimeout(() => {
+                        showNotification(`🎊 LEVEL UP! You reached level ${gameState.level}`, 'level-up');
+                        createConfetti();
+                        setTimeout(() => showMotivationalQuote('level'), 1500);
+                    }, 800);
+                } else {
+                    showNotification(`✅ Mission Complete! +${task.xp} XP and +${coinsEarned} coins`, 'success');
+                }
+            } else if (!e.target.checked && task.completed) {
+                task.completed = false;
+                
+                // Remove XP and coins
+                gameState.xp -= task.xp;
+                gameState.totalXp -= task.xp;
+                gameState.tasksCompleted -= 1;
+                gameState.coins -= Math.floor(task.xp / 4);
+                gameState.dailyQuest.completed -= 1;
+                
+                saveGameState();
+                updateUI();
+                
+                showNotification(`🔄 Mission reactivated`, 'info');
+            }
+        }
+
+        // Check if player should level up
+        function checkLevelUp() {
+            let leveledUp = false;
+            
+            while (gameState.xp >= gameState.nextLevelXp) {
+                gameState.xp -= gameState.nextLevelXp;
+                gameState.level += 1;
+                leveledUp = true;
+                
+                // Increase XP needed for next level (progressive difficulty)
+                gameState.nextLevelXp = Math.floor(gameState.nextLevelXp * 1.2);
+                
+                // Award bonus coins for leveling up
+                const bonusCoins = gameState.level * 15;
+                gameState.coins += bonusCoins;
+            }
+            
+            return leveledUp;
+        }
+
+        // Update streak counter
+        function updateStreak() {
+            const today = new Date().toDateString();
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayString = yesterday.toDateString();
+            
+            if (gameState.lastCompletedDate === today) {
+                // Already completed a task today, no change
+                return;
+            }
+            
+            if (gameState.lastCompletedDate === yesterdayString) {
+                // Completed a task yesterday, increase streak
+                gameState.streak += 1;
+                
+                // Show streak motivational quote for 7+ day streaks
+                if (gameState.streak >= 7) {
+                    setTimeout(() => showMotivationalQuote('streak'), 1200);
+                }
+                
+                // Bonus for maintaining streak
+                if (gameState.streak % 7 === 0) {
+                    // Weekly streak bonus
+                    const bonus = gameState.streak * 8;
+                    gameState.coins += bonus;
+                    showNotification(`🔥 ${gameState.streak} Day Streak! +${bonus} coins`, 'achievement');
+                }
+            } else if (gameState.lastCompletedDate && gameState.lastCompletedDate !== yesterdayString) {
+                // Missed a day, reset streak
+                gameState.streak = 1;
+                showNotification("💔 Streak broken! Starting a new one.", 'info');
+            } else {
+                // First task completion
+                gameState.streak = 1;
+            }
+            
+            gameState.lastCompletedDate = today;
+        }
+
+        // Avatar customization
+        avatarOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove active class from all options
+                avatarOptions.forEach(opt => opt.classList.remove('active'));
+                
+                // Add active class to clicked option
+                this.classList.add('active');
+                
+                // Update avatar
+                gameState.avatar = this.dataset.avatar;
+                saveGameState();
+                updateUI();
+                
+                showNotification(`✨ Transformed into ${this.dataset.avatar} ${this.textContent}`, 'info');
+            });
+        });
+
+        // Update reward buttons based on available coins
+        function updateRewardButtons() {
+            themeReward.disabled = gameState.coins < 50;
+            badgeReward.disabled = gameState.coins < 100;
+            doubleXpReward.disabled = gameState.coins < 150;
+        }
+
+        // Handle reward purchases
+        themeReward.addEventListener('click', function() {
+            if (gameState.coins >= 50) {
+                gameState.coins -= 50;
+                showNotification("🎨 Golden Theme unlocked! Your quest just got fancier!", 'achievement');
+                saveGameState();
+                updateUI();
+            }
+        });
+
+        badgeReward.addEventListener('click', function() {
+            if (gameState.coins >= 100) {
+                gameState.coins -= 100;
+                showNotification("🏅 Legendary Badge equipped! You're officially epic!", 'achievement');
+                saveGameState();
+                updateUI();
+            }
+        });
+
+        doubleXpReward.addEventListener('click', function() {
+            if (gameState.coins >= 150) {
+                gameState.coins -= 150;
+                showNotification("⚡ XP Power Boost activated! Get ready for double gains!", 'achievement');
+                saveGameState();
+                updateUI();
+            }
+        });
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'level-up' ? 'trophy' : type === 'achievement' ? 'medal' : type === 'epic' ? 'gem' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 400);
+            }, 3000);
+        }
+
+        // Create confetti effect for level up
+        function createConfetti() {
+            const colors = ['#ff9a3c', '#ff6f3c', '#4a6fa5', '#2ecc71', '#f39c12', '#9b59b6'];
+            
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.opacity = '1';
+                
+                document.body.appendChild(confetti);
+                
+                // Animate confetti
+                const animation = confetti.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+                ], {
+                    duration: 2000 + Math.random() * 2000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                });
+                
+                // Remove confetti after animation
+                animation.onfinish = () => {
+                    if (document.body.contains(confetti)) {
+                        document.body.removeChild(confetti);
+                    }
+                };
+            }
+        }
+
+        // Initialize the app
+        loadGameState();
+        
+        // Add some sample tasks if empty
+        if (gameState.tasks.length === 0) {
+            const sampleTasks = [
+                { text: "Complete morning routine", xp: 20, completed: false },
+                { text: "Work on important project", xp: 30, completed: false },
+                { text: "Read 10 pages of a book", xp: 25, completed: false }
+            ];
+            
+            gameState.tasks = sampleTasks;
+            saveGameState();
+            updateUI();
+        }
+    </script>
+</body>
+</html>
